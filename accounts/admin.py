@@ -4,7 +4,7 @@ from accounts.forms import CustomUserChangeForm, CustomUserCreationForm
 from accounts.models import CustomUser
 
 # Register your models here.
-class CustomUserAdmin(admin.ModelAdmin):
+class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
