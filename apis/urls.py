@@ -4,6 +4,9 @@ from django.urls import include, path
 
 urlpatterns = [
     path("",lambda request: JsonResponse({"message":"Welcome to Django List"})),
-     path("dj-rest-auth/", include("dj_rest_auth.urls")),
     path('posts/',include('posts.urls')),
+    path('users/',include('accounts.urls')),
+    path('auth/',include('dj_rest_auth.urls')),
+    path("auth/registration/",
+         include("dj_rest_auth.registration.urls")),
 ]

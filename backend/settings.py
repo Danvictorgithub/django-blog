@@ -28,9 +28,9 @@ SECRET_KEY = 'django-insecure-n$meku+v5d62=7!yib^j1p(csyvqi&edaep=0$g$^vkxf8)8r!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG","True") == "True"
 
-ALLOWED_HOSTS = []
-CORS_ALLOWED_ORIGINS = ["http://*","https://*"]
-CSRF_TRUSTED_ORIGINS = ["http://*","https://*"]
+ALLOWED_HOSTS = ["*"]
+CORS_ALLOWED_ORIGINS = ["http://*", "https://*"]
+CSRF_TRUSTED_ORIGINS = ["http://*", "https://*"]
 
 # Application definition
 
@@ -41,13 +41,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    
+    # 3rd-party apps
     "rest_framework",
     "corsheaders",
     "rest_framework.authtoken",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
     "dj_rest_auth",
+    "dj_rest_auth.registration",
+    # Local
     "apis.apps.ApisConfig",
     "accounts.apps.AccountsConfig",
-    "posts.apps.PostsConfig"
+    "posts.apps.PostsConfig",
 ]
 
 MIDDLEWARE = [
@@ -58,7 +66,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "whitenoise.middleware.WhiteNoiseMiddleware"
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "allauth.account.middleware.AccountMiddleware"
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -74,10 +83,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                "django.template.context_processors.request"
             ],
         },
     },
 ]
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+SITE_ID = 1
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
@@ -137,10 +150,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         'rest_framework.permissions.IsAuthenticated'
-    ], "DEFAULT_AUTHENTICATION_CLASSES":[
+    ], "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ]
+}
+
+REST_AUTH = {
+    'SESSION_LOGIN': False
 }
 
 AUTH_USER_MODEL = "accounts.CustomUser"
